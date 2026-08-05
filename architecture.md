@@ -104,33 +104,6 @@ Il sistema resta un’unica applicazione, ma le responsabilità sono separate tr
 
 Offre una struttura sufficiente per far evolvere il progetto, mantenendo una complessità compatibile con una sola persona e con un MVP breve.
 
----
-
-### Microservizi
-
-Ogni area funzionale viene sviluppata e distribuita come servizio indipendente.
-
-**Vantaggi**
-
-- separazione fisica forte;
-- possibilità di distribuire e scalare ogni servizio separatamente;
-- team diversi possono lavorare su aree autonome;
-- un servizio può avere un proprio ciclo di rilascio.
-
-**Svantaggi**
-
-- comunicazione di rete tra servizi;
-- gestione più complessa degli errori;
-- difficoltà nel mantenere coerenti dati distribuiti;
-- più ambienti da configurare e controllare;
-- maggiore difficoltà di test e monitoraggio;
-- costo operativo sproporzionato per il progetto.
-
-**Motivo dell’esclusione**
-
-Non esistono più team, necessità di scalabilità indipendente o cicli di rilascio separati. Il costo verrebbe sostenuto subito senza ottenere un beneficio concreto nell’MVP.
-
----
 
 ## 4. Decisione
 
