@@ -1,4 +1,4 @@
-## Scopo
+## Scopo 
 
 Questo documento raccoglie i requisiti confermati per l’MVP.
 
