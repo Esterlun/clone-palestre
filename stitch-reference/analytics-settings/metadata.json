@@ -1,0 +1,6 @@
+{
+  "name": "Aura Fit",
+  "description": "High-performance fitness analytics and workout tracking application with volume load progression, personal records, live session tracker, and AI performance coaching.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

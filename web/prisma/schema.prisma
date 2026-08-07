@@ -1,0 +1,184 @@
+// Schema dati Fase 1 (MVP).
+//
+// Il datasource usa SQLite in sviluppo. Le query passano esclusivamente
+// attraverso Prisma Client (nessun SQL raw specifico del dialetto), quindi
+// il passaggio a PostgreSQL richiede solo di cambiare "provider" e "url"
+// qui sotto (vedi docs/adr/0001-stack-tecnologico.md).
+//
+// Nota: SQLite non supporta il tipo "enum" di Prisma. Gli stati che in un
+// database diverso sarebbero enum (es. Session.status) sono quindi modellati
+// come String, con i valori ammessi documentati e validati a livello
+// applicativo in src/modules/workouts/types.ts.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// --- Identità e accesso -----------------------------------------------
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  workoutTemplates WorkoutTemplate[]
+  exercises        Exercise[]
+  sessions         Session[]
+  bodyMeasurements BodyMeasurement[]
+
+  @@map("users")
+}
+
+// --- Gestione allenamenti ----------------------------------------------
+
+// Un esercizio è predefinito quando ownerId è null, personalizzato quando
+// appartiene a uno specifico utente. Un esercizio personalizzato non deve
+// mai essere visibile o utilizzabile da un utente diverso dal proprietario:
+// questo vincolo è applicato dal service layer (src/modules/workouts), non
+// dallo schema.
+model Exercise {
+  id             String   @id @default(cuid())
+  name           String
+  ownerId        String?
+  owner          User?    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  tracksSets     Boolean  @default(true)
+  tracksReps     Boolean  @default(true)
+  tracksLoad     Boolean  @default(true)
+  tracksDuration Boolean  @default(false)
+  tracksDistance Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  templateExercises TemplateExercise[]
+  sessionExercises  SessionExercise[]
+
+  @@index([ownerId])
+  @@map("exercises")
+}
+
+model WorkoutTemplate {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  templateExercises TemplateExercise[]
+  // Le sessioni avviate da questo modello mantengono un riferimento
+  // opzionale, ma non dipendono dai suoi dati (vedi Session.sourceTemplateId).
+  sessions Session[] @relation("SessionSourceTemplate")
+
+  @@index([userId])
+  @@map("workout_templates")
+}
+
+model TemplateExercise {
+  id         String          @id @default(cuid())
+  templateId String
+  template   WorkoutTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  exerciseId String
+  exercise   Exercise        @relation(fields: [exerciseId], references: [id], onDelete: Restrict)
+  order      Int
+  plannedSets  Int?
+  plannedReps  Int?
+  targetLoad   Float?
+  notes        String?
+
+  @@unique([templateId, order])
+  @@map("template_exercises")
+}
+
+// Una sessione rappresenta ciò che l'utente ha realmente svolto. Quando
+// creata da un modello, sourceTemplateId conserva solo un riferimento
+// informativo: tutti i dati necessari (nome, esercizi, serie/ripetizioni
+// previste) vengono COPIATI in Session/SessionExercise al momento della
+// creazione. SessionExercise non ha alcuna chiave esterna verso
+// TemplateExercise, quindi modificare o eliminare il modello non può mai
+// alterare una sessione già creata: onDelete SetNull azzera solo il
+// riferimento informativo, non i dati copiati.
+model Session {
+  id               String           @id @default(cuid())
+  userId           String
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceTemplateId String?
+  sourceTemplate   WorkoutTemplate? @relation("SessionSourceTemplate", fields: [sourceTemplateId], references: [id], onDelete: SetNull)
+  name             String
+  notes            String?
+  // Valori ammessi: "IN_PROGRESS" | "COMPLETED" (vedi modules/workouts/types.ts)
+  status      String    @default("IN_PROGRESS")
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  sessionExercises SessionExercise[]
+
+  @@index([userId])
+  @@index([sourceTemplateId])
+  @@map("sessions")
+}
+
+model SessionExercise {
+  id         String   @id @default(cuid())
+  sessionId  String
+  session    Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  exerciseId String
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Restrict)
+  order      Int
+  // Copiati dal modello al momento della creazione (se presente); da qui in
+  // poi sono indipendenti e modificabili solo tramite le operazioni di
+  // sessione, mai propagati dal modello.
+  plannedSets Int?
+  plannedReps Int?
+  targetLoad  Float?
+  notes       String?
+
+  setResults SetResult[]
+
+  @@unique([sessionId, order])
+  @@map("session_exercises")
+}
+
+model SetResult {
+  id                String          @id @default(cuid())
+  sessionExerciseId String
+  sessionExercise   SessionExercise @relation(fields: [sessionExerciseId], references: [id], onDelete: Cascade)
+  setNumber         Int
+  reps              Int?
+  load              Float?
+  durationSeconds   Int?
+  distanceMeters    Float?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@unique([sessionExerciseId, setNumber])
+  @@map("set_results")
+}
+
+// --- Metriche personali --------------------------------------------------
+
+// Tutti i campi sono opzionali tranne data e utente. Nessuna relazione con
+// Session: una misurazione esiste e viene gestita indipendentemente da
+// qualunque allenamento (vedi boundaries.md, sezione "Metriche personali").
+model BodyMeasurement {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date              DateTime
+  weightKg          Float?
+  bodyFatPercentage Float?
+  waistCm           Float?
+  chestCm           Float?
+  armsCm            Float?
+  thighsCm          Float?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([userId])
+  @@map("body_measurements")
+}

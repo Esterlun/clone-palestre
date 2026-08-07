@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Sora', sans-serif;
+    background-color: #E9E8F0;
+    color: #1b1b24;
+  }
+}
+
+.font-sora {
+  font-family: 'Sora', sans-serif;
+}
+
+.glow-active {
+  box-shadow: 0 0 20px 0 rgba(109, 93, 254, 0.4);
+}
+
+.glow-complete {
+  box-shadow: 0 0 15px 0 rgba(101, 249, 231, 0.5);
+}
+
+.glow-button {
+  box-shadow: 0 4px 20px rgba(109, 93, 254, 0.35);
+}
+
+.glow-primary-soft {
+  box-shadow: 0 8px 30px rgba(84, 65, 228, 0.15);
+}
+
+/* Hide number input arrows */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Custom smooth scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #c8c4d8;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #787587;
+}

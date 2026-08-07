@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+/*
+ * Token di design condivisi, ricavati dai tre prototipi Stitch in
+ * stitch-reference/ (vedi il piano di riconciliazione approvato): i tre
+ * prototipi usavano già la stessa palette di base con variazioni minime,
+ * quindi qui viene adottata un'unica versione invece di sceglierne uno.
+ * Definiti con @theme cosi' Tailwind genera le utility corrispondenti
+ * (bg-primary, text-text-secondary, font-sora, ecc.).
+ */
+@theme {
+  --font-sora: "Sora", sans-serif;
+
+  --color-primary: #5340e4;
+  --color-primary-hover: #6d5dfe;
+  --color-accent: #65f9e7;
+  --color-success: #006a61;
+
+  --color-background: #fcf8ff;
+  --color-surface-alt: #f6f1ff;
+  --color-surface-alt-2: #eae6f4;
+  --color-border: #c8c4d8;
+
+  --color-text-primary: #1b1b24;
+  --color-text-secondary: #474555;
+  --color-text-muted: #787587;
+
+  --color-dark-card: #1a1b2e;
+  --color-dark-card-alt: #2d1b33;
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sora), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+/*
+ * Stile delle pagine di login/registrazione, non ancora ridisegnate con i
+ * componenti dei prototipi (fuori perimetro di questo passo). Scoperto sotto
+ * .auth-page per non entare in conflitto con i componenti di navigazione in
+ * src/components/nav, che usano solo utility Tailwind sugli stessi elementi
+ * (button, input, form): le regole non "layered" come queste hanno sempre
+ * priorità sulle utility di @import "tailwindcss", quindi senza questo scope
+ * avrebbero sovrascritto lo stile di sidebar/bottom-nav/impostazioni.
+ */
+.auth-page {
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+.auth-page form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.auth-page label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.auth-page input {
+  font-size: 1rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid #888;
+  border-radius: 0.4rem;
+}
+
+.auth-page button {
+  font-size: 1rem;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 0.4rem;
+  background: #1c1c1c;
+  color: #fff;
+  cursor: pointer;
+}
+
+.auth-page button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-page [role="alert"] {
+  color: #b00020;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.auth-page section {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+}

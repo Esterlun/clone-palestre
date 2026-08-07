@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "clone-palestre-web",
+      "runtimeExecutable": "C:\\Users\\ESTERN~1\\AppData\\Local\\Temp\\claude\\C--Users-EsterNarduzzi-project-clone-palestre\\8ff6b1f6-6454-456c-bf58-0a2512ef5096\\scratchpad\\dev-wrapper.cmd",
+      "runtimeArgs": [],
+      "port": 3000
+    }
+  ]
+}

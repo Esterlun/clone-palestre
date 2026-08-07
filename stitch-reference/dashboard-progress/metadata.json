@@ -1,0 +1,6 @@
+{
+  "name": "Aura Fit",
+  "description": "Luminous Dusk fitness dashboard, workout logger, and AI fitness coach.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
