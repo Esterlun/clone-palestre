@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { logoutAction } from "@/lib/authActions";
+import { startFreeSessionAction } from "@/app/(app)/sessions/actions";
 import { NAV_ITEMS } from "./navItems";
 
 export function Sidebar({ userEmail }: { userEmail: string }) {
@@ -10,9 +11,19 @@ export function Sidebar({ userEmail }: { userEmail: string }) {
 
   return (
     <aside className="fixed inset-y-0 left-0 z-50 hidden w-64 flex-col border-r border-border/20 bg-background py-8 md:flex">
-      <h2 className="mb-8 px-6 text-2xl font-bold tracking-tight text-primary">Clone Palestre</h2>
+      <h2 className="mb-6 px-6 text-2xl font-bold tracking-tight text-primary">Clone Palestre</h2>
 
-      <nav className="flex flex-1 flex-col">
+      <form action={startFreeSessionAction} className="px-6">
+        <button
+          type="submit"
+          className="flex w-full items-center justify-center gap-1.5 rounded-full bg-gradient-to-br from-primary-hover to-primary px-4 py-2.5 text-sm font-bold text-white shadow-[0_8px_20px_-8px_rgba(83,64,228,0.6)]"
+        >
+          <span className="material-symbols-outlined text-[18px]">add</span>
+          Nuova sessione libera
+        </button>
+      </form>
+
+      <nav className="mt-6 flex flex-1 flex-col">
         {NAV_ITEMS.map((item) => {
           const isActive = pathname.startsWith(item.href);
           return (

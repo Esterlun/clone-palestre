@@ -12,8 +12,11 @@ interface MeasurementPoint {
   thighsCm: number | null;
 }
 
+// Il peso usa il teal scuro (#00b3a4) per distinguersi a colpo d'occhio dal
+// grafico di volume settimanale della dashboard, che è violetto (vedi
+// _handoff/design_handoff_stitch_redesign/README.md, sezione Metriche).
 const METRIC_FIELDS = [
-  { key: "weightKg", label: "Peso", unit: "kg", color: "#5340e4" },
+  { key: "weightKg", label: "Peso", unit: "kg", color: "#00b3a4" },
   { key: "bodyFatPercentage", label: "Massa grassa", unit: "%", color: "#c55243" },
   { key: "waistCm", label: "Vita", unit: "cm", color: "#006a61" },
   { key: "chestCm", label: "Petto", unit: "cm", color: "#6d5dfe" },
@@ -50,7 +53,7 @@ export function MetricTrendChart({ measurements }: { measurements: MeasurementPo
   const range = Math.max(max - min, 1);
 
   return (
-    <div className="rounded-3xl border border-border/40 bg-surface-alt p-6">
+    <div className="rounded-[24px] bg-surface-alt p-6">
       <h2 className="font-semibold text-text-primary">Andamento</h2>
       <div className="mt-3 flex flex-wrap gap-2">
         {availableFields.map((field) => (
@@ -77,19 +80,25 @@ export function MetricTrendChart({ measurements }: { measurements: MeasurementPo
             <line x1="0" y1="0" x2="100" y2="0" stroke="#e5e0ee" strokeWidth="0.5" />
             <line x1="0" y1="50" x2="100" y2="50" stroke="#e5e0ee" strokeWidth="0.5" />
             <line x1="0" y1="100" x2="100" y2="100" stroke="#e5e0ee" strokeWidth="0.5" />
-            <polyline
-              fill="none"
-              stroke={activeField.color}
-              strokeWidth="2"
-              vectorEffect="non-scaling-stroke"
-              points={points
-                .map((point, index) => {
-                  const x = (index / (points.length - 1)) * 100;
-                  const y = 90 - ((point.value - min) / range) * 80;
-                  return `${x},${y}`;
-                })
-                .join(" ")}
-            />
+            {points.map((point, index) => {
+              const barWidth = 100 / points.length;
+              const x = index * barWidth + barWidth * 0.2;
+              const width = barWidth * 0.6;
+              const height = Math.max(((point.value - min) / range) * 80, 3);
+              const y = 90 - height;
+              return (
+                <rect
+                  key={point.date.toISOString()}
+                  x={x}
+                  y={y}
+                  width={width}
+                  height={height}
+                  rx={width * 0.3}
+                  fill={activeField.color}
+                  vectorEffect="non-scaling-stroke"
+                />
+              );
+            })}
           </svg>
           <div className="mt-2 flex justify-between text-xs text-text-muted">
             <span>{points[0].date.toLocaleDateString("it-IT", { day: "numeric", month: "short" })}</span>

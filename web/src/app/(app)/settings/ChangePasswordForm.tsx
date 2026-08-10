@@ -9,8 +9,8 @@ export function ChangePasswordForm() {
   const [state, formAction, isPending] = useActionState(changePasswordAction, initialState);
 
   return (
-    <form action={formAction} className="mt-4 flex flex-col gap-3 rounded-2xl border border-border/50 p-4">
-      <h2 className="font-semibold text-text-primary">Cambia password</h2>
+    <form action={formAction} className="mt-4 flex flex-col gap-3 rounded-2xl bg-white p-4">
+      <h2 className="font-bold text-text-primary">Cambia password</h2>
       <label className="text-sm text-text-secondary">
         Password attuale
         <input
@@ -52,9 +52,9 @@ export function ChangePasswordForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="self-start rounded-full bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover disabled:opacity-60"
+        className="self-start rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-hover disabled:opacity-60"
       >
-        {isPending ? "Salvataggio…" : "Salva nuova password"}
+        {isPending ? "Salvataggio…" : "Salva"}
       </button>
     </form>
   );

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { requireCurrentUser } from "@/lib/auth";
 import { listExercisesForUser } from "@/modules/workouts/exerciseService";
 import { TemplateForm } from "../TemplateForm";
@@ -9,7 +10,10 @@ export default async function NewTemplatePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-text-primary">Nuovo modello</h1>
+      <Link href="/templates" className="text-sm text-text-muted hover:text-text-primary">
+        ← Modelli
+      </Link>
+      <h1 className="mt-2 text-2xl font-bold text-text-primary">Nuovo modello</h1>
       <TemplateForm action={createTemplateAction} exercises={exercises} submitLabel="Crea modello" />
     </div>
   );

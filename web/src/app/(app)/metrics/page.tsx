@@ -23,11 +23,14 @@ export default async function MetricsPage() {
       {measurements.length === 0 ? (
         <p className="mt-6 text-text-secondary">Nessuna misurazione registrata ancora.</p>
       ) : (
-        <ul className="mt-6 flex flex-col gap-3">
-          {measurements.map((measurement) => (
-            <MeasurementRow key={measurement.id} measurement={measurement} />
-          ))}
-        </ul>
+        <div className="mt-6">
+          <h2 className="mb-3 text-sm font-bold text-text-primary">Storico misurazioni</h2>
+          <ul className="flex flex-col gap-3">
+            {measurements.map((measurement) => (
+              <MeasurementRow key={measurement.id} measurement={measurement} />
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireCurrentUser } from "@/lib/auth";
 import { WorkoutNotFoundError } from "@/modules/workouts/errors";
@@ -30,13 +31,16 @@ export default async function TemplateDetailPage({ params }: { params: Promise<{
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <Link href="/templates" className="text-sm text-text-muted hover:text-text-primary">
+        ← Modelli
+      </Link>
+      <div className="mt-2 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-text-primary">{template.name}</h1>
         <div className="flex gap-2">
           <form action={boundStartSessionAction}>
             <button
               type="submit"
-              className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover"
+              className="rounded-full bg-gradient-to-br from-primary-hover to-primary px-4 py-2 text-sm font-bold text-white shadow-[0_8px_20px_-8px_rgba(83,64,228,0.6)]"
             >
               Avvia sessione
             </button>
@@ -44,7 +48,7 @@ export default async function TemplateDetailPage({ params }: { params: Promise<{
           <form action={boundDuplicateAction}>
             <button
               type="submit"
-              className="rounded-full border border-border px-4 py-2 text-sm font-medium text-text-primary hover:bg-surface-alt-2"
+              className="rounded-full border-[1.5px] border-primary px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/5"
             >
               Duplica
             </button>
@@ -66,6 +70,7 @@ export default async function TemplateDetailPage({ params }: { params: Promise<{
           notes: exercise.notes,
         }))}
         submitLabel="Salva modifiche"
+        cancelHref={`/templates/${template.id}`}
       />
     </div>
   );

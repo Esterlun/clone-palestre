@@ -8,6 +8,7 @@ import type {
   RecordSetResultInput,
   StartSessionInput,
   UpdateSessionDetailsInput,
+  UpdateSessionExerciseInput,
 } from "./types";
 
 const sessionInclude = {
@@ -99,6 +100,29 @@ export async function addSessionExercise(
       notes: input.notes ?? null,
     },
     include: { exercise: true, setResults: true },
+  });
+}
+
+// Cambia l'esercizio associato a una riga della sessione già avviata (es.
+// l'utente ha selezionato l'esercizio sbagliato o vuole sostituirlo con una
+// variante): le serie già registrate restano collegate alla stessa riga,
+// dato che SetResult referenzia sessionExerciseId e non exerciseId.
+export async function updateSessionExercise(
+  userId: string,
+  sessionId: string,
+  sessionExerciseId: string,
+  input: UpdateSessionExerciseInput
+) {
+  const session = await getSessionForUser(userId, sessionId);
+  const target = session.sessionExercises.find((exercise) => exercise.id === sessionExerciseId);
+  if (!target) {
+    throw new WorkoutNotFoundError("Esercizio della sessione non trovato.");
+  }
+
+  return prisma.sessionExercise.update({
+    where: { id: sessionExerciseId },
+    data: { exerciseId: input.exerciseId },
+    include: { exercise: true, setResults: { orderBy: { setNumber: "asc" } } },
   });
 }
 

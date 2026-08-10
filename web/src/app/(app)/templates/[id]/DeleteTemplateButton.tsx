@@ -18,7 +18,7 @@ export function DeleteTemplateButton({
     >
       <button
         type="submit"
-        className="rounded-full border border-red-300 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+        className="rounded-full bg-danger-surface px-4 py-2 text-sm font-semibold text-danger hover:bg-danger-surface/70"
       >
         Elimina modello
       </button>

@@ -27,6 +27,26 @@
 
   --color-dark-card: #1a1b2e;
   --color-dark-card-alt: #2d1b33;
+
+  /*
+   * Token introdotti dal redesign "Stitch" (vedi
+   * _handoff/design_handoff_stitch_redesign/README.md, sezione "Design
+   * Tokens" -> "Nuovi valori"): stato ambra per "in corso"/volume, tint teal
+   * per stat positive, teal scuro per il grafico peso, violetto chiaro per
+   * le barre secondarie, danger per l'eliminazione account.
+   */
+  --color-amber: #92400e;
+  --color-amber-surface: #fdf1de;
+  --color-amber-border: #d97706;
+  --color-teal-surface: #eafaf6;
+  --color-teal-surface-text: #007167;
+  --color-teal-surface-text-strong: #00695f;
+  --color-teal-strong: #00b3a4;
+  --color-violet-light: #d9cff6;
+  --color-coral: #c55243;
+  --color-danger: #93000a;
+  --color-danger-surface: #ffdad6;
+  --color-danger-surface-soft: #fff1ef;
 }
 
 :root {
@@ -45,63 +65,3 @@ body {
   color: var(--color-text-primary);
 }
 
-/*
- * Stile delle pagine di login/registrazione, non ancora ridisegnate con i
- * componenti dei prototipi (fuori perimetro di questo passo). Scoperto sotto
- * .auth-page per non entare in conflitto con i componenti di navigazione in
- * src/components/nav, che usano solo utility Tailwind sugli stessi elementi
- * (button, input, form): le regole non "layered" come queste hanno sempre
- * priorità sulle utility di @import "tailwindcss", quindi senza questo scope
- * avrebbero sovrascritto lo stile di sidebar/bottom-nav/impostazioni.
- */
-.auth-page {
-  max-width: 28rem;
-  margin: 0 auto;
-  padding: 1.5rem 1rem;
-}
-
-.auth-page form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 1rem;
-}
-
-.auth-page label {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.auth-page input {
-  font-size: 1rem;
-  padding: 0.6rem 0.7rem;
-  border: 1px solid #888;
-  border-radius: 0.4rem;
-}
-
-.auth-page button {
-  font-size: 1rem;
-  padding: 0.7rem 1rem;
-  border: none;
-  border-radius: 0.4rem;
-  background: #1c1c1c;
-  color: #fff;
-  cursor: pointer;
-}
-
-.auth-page button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.auth-page [role="alert"] {
-  color: #b00020;
-  font-size: 0.9rem;
-  margin: 0;
-}
-
-.auth-page section {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid #ddd;
-}

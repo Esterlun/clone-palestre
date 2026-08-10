@@ -26,8 +26,8 @@ export function AddMeasurementForm() {
   }, [state]);
 
   return (
-    <form ref={formRef} action={formAction} className="rounded-2xl border border-dashed border-border p-4">
-      <p className="mb-3 text-sm font-semibold text-text-primary">Nuova misurazione</p>
+    <form ref={formRef} action={formAction} className="rounded-2xl bg-white p-4">
+      <p className="mb-3 text-sm font-bold text-text-primary">Nuova misurazione</p>
       <MeasurementFormFields defaults={{ date: todayAsInputValue() }} />
       {state.error && (
         <p role="alert" className="mt-3 text-sm text-red-600">
@@ -37,9 +37,9 @@ export function AddMeasurementForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="mt-3 rounded-full bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover disabled:opacity-60"
+        className="mt-3 rounded-full bg-gradient-to-br from-primary-hover to-primary px-4 py-2 text-sm font-bold text-white shadow-[0_8px_20px_-8px_rgba(83,64,228,0.6)] disabled:opacity-60"
       >
-        {isPending ? "Salvataggio…" : "Registra misurazione"}
+        {isPending ? "Salvataggio…" : "Aggiungi"}
       </button>
     </form>
   );

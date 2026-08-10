@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useState } from "react";
 import { ExercisePicker, type ExerciseOption } from "@/components/exercises/ExercisePicker";
 import type { TemplateFormState } from "./actions";
@@ -30,6 +31,7 @@ interface TemplateFormProps {
   initialNotes?: string | null;
   initialExercises?: InitialTemplateExercise[];
   submitLabel: string;
+  cancelHref?: string;
 }
 
 let nextRowKey = 0;
@@ -55,6 +57,7 @@ export function TemplateForm({
   initialNotes = "",
   initialExercises = [],
   submitLabel,
+  cancelHref = "/templates",
 }: TemplateFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
   const [rows, setRows] = useState<ExerciseRow[]>(() =>
@@ -83,7 +86,7 @@ export function TemplateForm({
   const hasEmptyRow = rows.some((row) => !row.exerciseId);
 
   return (
-    <form action={formAction} className="mt-6 flex flex-col gap-6">
+    <form action={formAction} className="mt-6 flex flex-col gap-6 rounded-[22px] bg-white p-5">
       <input type="hidden" name="exercisesJson" value={JSON.stringify(rows)} />
 
       <div>
@@ -118,7 +121,7 @@ export function TemplateForm({
           <button
             type="button"
             onClick={() => setRows((current) => [...current, makeRow()])}
-            className="text-sm font-medium text-primary hover:text-primary-hover"
+            className="rounded-full border-[1.5px] border-dashed border-primary px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary/5"
           >
             + Aggiungi esercizio
           </button>
@@ -208,13 +211,21 @@ export function TemplateForm({
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={isPending || rows.length === 0 || hasEmptyRow}
-        className="self-start rounded-full bg-primary px-5 py-2.5 font-medium text-white hover:bg-primary-hover disabled:opacity-60"
-      >
-        {isPending ? "Salvataggio…" : submitLabel}
-      </button>
+      <div className="flex gap-3">
+        <Link
+          href={cancelHref}
+          className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-text-secondary hover:bg-surface-alt-2"
+        >
+          Annulla
+        </Link>
+        <button
+          type="submit"
+          disabled={isPending || rows.length === 0 || hasEmptyRow}
+          className="rounded-full bg-gradient-to-br from-primary-hover to-primary px-5 py-2.5 font-bold text-white shadow-[0_8px_20px_-8px_rgba(83,64,228,0.6)] disabled:opacity-60"
+        >
+          {isPending ? "Salvataggio…" : submitLabel}
+        </button>
+      </div>
     </form>
   );
 }

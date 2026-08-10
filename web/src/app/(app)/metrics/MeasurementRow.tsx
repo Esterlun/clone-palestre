@@ -74,7 +74,7 @@ export function MeasurementRow({ measurement }: { measurement: MeasurementData }
 
   if (isEditing) {
     return (
-      <li className="rounded-2xl border border-border/50 p-4">
+      <li className="rounded-2xl bg-white p-4">
         <form action={formAction} className="flex flex-col gap-3">
           <MeasurementFormFields
             defaults={{
@@ -116,21 +116,24 @@ export function MeasurementRow({ measurement }: { measurement: MeasurementData }
   const recordedFields = SUMMARY_FIELDS.filter((field) => measurement[field.key] != null);
 
   return (
-    <li className="flex items-center justify-between gap-3 rounded-2xl border border-border/40 bg-surface-alt px-5 py-4">
-      <div>
-        <p className="font-semibold text-text-primary">{formatDate(measurement.date)}</p>
-        <p className="mt-1 text-sm text-text-secondary">
-          {recordedFields.length === 0
-            ? "Nessun dato registrato"
-            : recordedFields
-                .map((field) => `${field.label}: ${measurement[field.key]}${field.unit}`)
-                .join(" · ")}
-        </p>
-        {deleteError && (
-          <p role="alert" className="mt-1 text-sm text-red-600">
-            {deleteError}
+    <li className="flex items-center justify-between gap-3 rounded-2xl bg-white px-5 py-4">
+      <div className="flex items-start gap-3">
+        <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary" />
+        <div>
+          <p className="font-semibold text-text-primary">{formatDate(measurement.date)}</p>
+          <p className="mt-1 text-sm text-text-secondary">
+            {recordedFields.length === 0
+              ? "Nessun dato registrato"
+              : recordedFields
+                  .map((field) => `${field.label}: ${measurement[field.key]}${field.unit}`)
+                  .join(" · ")}
           </p>
-        )}
+          {deleteError && (
+            <p role="alert" className="mt-1 text-sm text-red-600">
+              {deleteError}
+            </p>
+          )}
+        </div>
       </div>
       <div className="flex shrink-0 gap-2">
         <button

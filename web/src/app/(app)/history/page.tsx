@@ -39,7 +39,7 @@ export default async function HistoryPage({ searchParams }: HistoryPageProps) {
         </Link>
       </div>
 
-      <form action="/history" className="mt-4 flex flex-wrap items-end gap-3">
+      <form action="/history" className="mt-4 flex flex-wrap items-end gap-3 rounded-2xl bg-white p-4">
         <label className="text-xs text-text-secondary">
           Da
           <input
@@ -60,7 +60,7 @@ export default async function HistoryPage({ searchParams }: HistoryPageProps) {
         </label>
         <button
           type="submit"
-          className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover"
+          className="rounded-full bg-gradient-to-br from-primary-hover to-primary px-4 py-2 text-sm font-bold text-white shadow-[0_8px_20px_-8px_rgba(83,64,228,0.6)]"
         >
           Filtra
         </button>
@@ -81,16 +81,22 @@ export default async function HistoryPage({ searchParams }: HistoryPageProps) {
             <li key={session.id}>
               <Link
                 href={`/sessions/${session.id}`}
-                className="block rounded-2xl border border-border/40 bg-surface-alt px-5 py-4 hover:border-primary/40"
+                className="block rounded-2xl bg-white px-5 py-4 hover:bg-surface-alt-2/60"
               >
                 <div className="flex items-center justify-between">
-                  <p className="font-semibold text-text-primary">{session.name}</p>
-                  <span className="text-xs font-medium text-text-muted">
+                  <p className="text-[15px] font-bold text-text-primary">{session.name}</p>
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                      session.status === "COMPLETED"
+                        ? "bg-success/10 text-success"
+                        : "bg-amber-border/14 text-amber"
+                    }`}
+                  >
                     {session.status === "COMPLETED" ? "Completata" : "In corso"}
                   </span>
                 </div>
-                <p className="mt-1 text-sm text-text-secondary">{formatSessionDate(session.startedAt)}</p>
                 <p className="mt-1 text-sm text-text-secondary">
+                  {formatSessionDate(session.startedAt)} ·{" "}
                   {session.sessionExercises.length}{" "}
                   {session.sessionExercises.length === 1 ? "esercizio" : "esercizi"}
                 </p>

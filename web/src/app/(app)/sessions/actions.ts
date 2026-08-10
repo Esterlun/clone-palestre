@@ -12,8 +12,13 @@ import {
   startFreeSession,
   startSessionFromTemplate,
   updateSessionDetails,
+  updateSessionExercise,
 } from "@/modules/workouts/sessionService";
-import type { AddSessionExerciseInput, RecordSetResultInput } from "@/modules/workouts/types";
+import type {
+  AddSessionExerciseInput,
+  RecordSetResultInput,
+  UpdateSessionExerciseInput,
+} from "@/modules/workouts/types";
 
 export interface ActionResult {
   error?: string;
@@ -47,6 +52,23 @@ export async function addSessionExerciseAction(
       return { error: error.message };
     }
     return { error: "Non è stato possibile aggiungere l'esercizio. Riprova." };
+  }
+}
+
+export async function updateSessionExerciseAction(
+  sessionId: string,
+  sessionExerciseId: string,
+  input: UpdateSessionExerciseInput
+): Promise<ActionResult> {
+  const user = await requireCurrentUser();
+  try {
+    await updateSessionExercise(user.id, sessionId, sessionExerciseId, input);
+    return {};
+  } catch (error) {
+    if (error instanceof WorkoutValidationError) {
+      return { error: error.message };
+    }
+    return { error: "Non è stato possibile cambiare l'esercizio. Riprova." };
   }
 }
 

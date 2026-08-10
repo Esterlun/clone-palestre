@@ -40,6 +40,10 @@ export interface AddSessionExerciseInput {
   notes?: string | null;
 }
 
+export interface UpdateSessionExerciseInput {
+  exerciseId: string;
+}
+
 export interface RecordSetResultInput {
   setNumber: number;
   reps?: number | null;
